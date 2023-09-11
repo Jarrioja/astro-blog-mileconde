@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/default.astro";
+import { wpquery } from "../../services/wordpress";
+import { LOAD_ALL_POSTS } from "../../services/queries";
+
+export async function getStaticPaths() {
+  const data = await wpquery({ query: LOAD_ALL_POSTS });
+  return data.posts.nodes.map((post: any) => {
+    return {
+      params: { slug: post.slug },
+      props: { post },
+    };
+  });
+}
+
+const { post } = Astro.props;
+---
+
+<Layout title={post.title}>
+  <img
+    src={post.featuredImage.node.mediaItemUrl}
+    srcset={post.featuredImage.node.srcSet}
+    alt={post.featuredImage.node.alt}
+    transition:name=`img-${post.slug}`
+  />
+  <h1 class='text-white text-4xl py-4'>{post.title}</h1>
+  <p class='text-white py-2'>Escrito por {post.author.node.name}</p>
+  <Fragment class='text-white' set:html={post.content} />
+  <p>
+    <a href='/'>Regresar</a>
+  </p>
+</Layout>

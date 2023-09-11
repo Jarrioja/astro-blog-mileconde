@@ -1,0 +1,22 @@
+---
+import CardPost from "./CardPost.astro";
+import { wpquery } from "../services/wordpress";
+import { LOAD_ALL_POSTS_EXCERPTS } from "../services/queries";
+
+const { posts } = await wpquery({ query: LOAD_ALL_POSTS_EXCERPTS });
+---
+
+<div class='grid gap-8 sm:grid-cols-2 lg:grid-cols-3'>
+  {
+    posts.nodes.map((post: any) => {
+      return (
+        <CardPost
+          title={post.title}
+          slug={post.slug}
+          excerpt={post.excerpt}
+          image={post.featuredImage.node}
+        />
+      );
+    })
+  }
+</div>
