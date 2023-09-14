@@ -1,18 +1,21 @@
 ---
+import type { HomepagePostsQuery } from "../interfaces/homepagePostQuery";
 import CardPost from "./CardPost.astro";
-import { wpquery } from "../services/wordpress";
-import { LOAD_ALL_POSTS_EXCERPTS } from "../services/queries";
 
-const { posts } = await wpquery({ query: LOAD_ALL_POSTS_EXCERPTS });
+interface Props {
+  posts: object;
+}
+
+const { posts } = Astro.props as HomepagePostsQuery;
 ---
 
 <div class='grid gap-8 sm:grid-cols-2 lg:grid-cols-3'>
   {
-    posts.nodes.map((post: any) => {
+    posts.nodes.map((post) => {
       return (
         <CardPost
           title={post.title}
-          slug={post.slug}
+          uri={post.uri}
           excerpt={post.excerpt}
           image={post.featuredImage.node}
         />

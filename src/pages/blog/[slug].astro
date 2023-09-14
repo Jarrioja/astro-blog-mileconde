@@ -12,7 +12,7 @@ export async function getStaticPaths() {
     };
   });
 }
-
+export const prerender = true;
 const { post } = Astro.props;
 ---
 
@@ -23,9 +23,10 @@ const { post } = Astro.props;
     alt={post.featuredImage.node.alt}
     transition:name=`img-${post.slug}`
   />
-  <h1 class='text-white text-4xl py-4'>{post.title}</h1>
-  <p class='text-white py-2'>Escrito por {post.author.node.name}</p>
-  <Fragment class='text-white' set:html={post.content} />
+  <article class='prose lg:prose-xl bg-white mx-auto w-full'>
+    <h1 class=''>{post.title}</h1>
+    <Fragment class='text-white' set:html={post.content} />
+  </article>
   <p>
     <a href='/'>Regresar</a>
   </p>
