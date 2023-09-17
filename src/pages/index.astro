@@ -1,15 +1,22 @@
 ---
 import Layout from "../layouts/default.astro";
 import PostsGrid from "../components/PostsGrid.astro";
-import { homePagePostsQuery, getAllUris, getNodeByURI } from "../lib/api";
+import { homePagePostsQuery, getAllUris, getNodeByURI } from "../lib/worpdress";
 import type { HomepagePostsQuery, GetAllUris } from "../interfaces/";
 import type { GetNodeByURI } from "../interfaces/getNodeByURI";
+
+const { nodeByUri: node }: GetNodeByURI = await getNodeByURI("/");
+const { seo, featuredImage } = node;
 
 const { posts }: HomepagePostsQuery = await homePagePostsQuery();
 ---
 
-<Layout title='Welcome to Astro.'>
+<Layout
+  title={seo.title}
+  description={seo.metaDesc}
+  schema={seo.schema.raw}
+  canonical={seo.canonical}
+  image={featuredImage}
+>
   <PostsGrid {posts} />
 </Layout>
-
-<style></style>

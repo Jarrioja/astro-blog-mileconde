@@ -34,6 +34,17 @@ export const NODE_BY_URI = `
                 uri
                 excerpt
                 content
+                seo{
+                    metaDesc
+                    title
+                    metaRobotsNoindex
+                    canonical
+                    metaRobotsNofollow
+                    schema {
+                        raw
+                    }
+                    fullHead
+                }
                 categories {
                     nodes {
                         name
@@ -58,6 +69,18 @@ export const NODE_BY_URI = `
                 uri
                 date
                 content
+                seo{
+                    metaDesc
+                    title
+                    metaRobotsNoindex
+                    canonical
+                    metaRobotsNofollow
+                    schema {
+                        
+                        raw
+                    }
+                    fullHead
+                }
             }
             ... on Category {
                 id
@@ -84,6 +107,11 @@ export const NODE_BY_URI = `
                                     width
                                 }
                             }
+                        }
+                        seo{
+                            metaDesc
+                            title
+                            fullHead
                         }
                     }
                 }
@@ -117,32 +145,55 @@ export const GET_ALL_URIS = `
     }
 `;
 
-export const HOMEPAGE_POSTS_QUERY = `
-    query HOMEPAGE_POSTS_QUERY {
-        posts {
-            nodes {
-                date
-                uri
+export const GET_HOMEPAGE_POSTS = `
+  query GetHomepagePost {
+    generalSettings {
+        title
+        description
+    }
+    posts {
+      nodes {
+        date
+        uri
+        title
+        commentCount
+        excerpt
+        categories {
+          nodes {
+            name
+            uri
+          }
+        }
+        featuredImage {
+          node {
+            srcSet
+            sourceUrl
+            altText
+            mediaDetails {
+              height
+              width
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_POST_BY_SLUG = `
+    query PostBySlug($slug: String!) {
+        generalSettings {
+            title
+        }
+        postBy(slug: $slug) {
+            id
+            content
+            title
+            slug
+            seo {
+                metaDesc
                 title
-                commentCount
-                excerpt
-                categories {
-                    nodes {
-                        name
-                        uri
-                    }
-                }
-                featuredImage {
-                    node {
-                        srcSet
-                        sourceUrl
-                        altText
-                        mediaDetails {
-                            height
-                            width
-                        }
-                    }
-                }
+                fullHead
             }
         }
     }

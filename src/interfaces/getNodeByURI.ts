@@ -14,6 +14,7 @@ export type NodeByURI = {
   content: string;
   categories: Categories;
   featuredImage: FeaturedImage;
+  seo: Seo;
 };
 
 export type Categories = {
@@ -39,4 +40,18 @@ export type FeaturedImageNode = {
 export type MediaDetails = {
   height: number;
   width: number;
+};
+
+export type Seo = {
+  metaDesc: string;
+  title: string;
+  metaRobotsNoindex: string;
+  canonical: string;
+  metaRobotsNofollow: string;
+  schema: Schema;
+  fullHead: string;
+};
+
+export type Schema = {
+  raw: string;
 };

@@ -1,6 +1,6 @@
 ---
 interface Props {
-  post: {
+  node: {
     id: string;
     postId: number;
     title: string;
@@ -19,9 +19,21 @@ interface Props {
         uri: string;
       }[];
     };
+    seo: {
+      metaDesc: string;
+      title: string;
+      metaRobotsNoindex: string;
+      canonical: string;
+      metaRobotsNofollow: string;
+      schema: {
+        raw: string;
+      };
+      fullHead: string;
+    };
     featuredImage: {
       node: {
-        mediaItemUrl: string;
+        srcSet: string;
+        sourceUrl: string;
         altText: string;
       };
     };
@@ -40,23 +52,30 @@ interface Props {
 export interface PostProps extends Props {}
 
 import Layout from "../../layouts/default.astro";
-const { node } = Astro.props;
+const { node: post } = Astro.props;
+const { seo, featuredImage } = post;
 ---
 
-<Layout title={node.title}>
+<Layout
+  title={seo.title}
+  description={seo.metaDesc}
+  schema={seo.schema.raw}
+  canonical={seo.canonical}
+  image={post.featuredImage.node.sourceUrl}
+>
   <div class='aspect-video'>
     {}
     <img
       class='object-contain h-full w-full'
-      src={node.featuredImage.node.mediaItemUrl}
-      srcset={node.featuredImage.node.srcSet}
-      alt={node.featuredImage.node.alt}
-      transition:name={`img-${node.uri}`}
+      src={post.featuredImage.node.sourceUrl}
+      srcset={post.featuredImage.node.srcSet}
+      alt={post.featuredImage.node.altText}
+      transition:name={`img-${post.uri}`}
     />
   </div>
   <article class='prose lg:prose-xl bg-white mx-auto w-full'>
-    <h1 class='' transition:name={`title-${node.uri}`}>{node.title}</h1>
-    <Fragment class='text-white' set:html={node.content} />
+    <h1 class='' transition:name={`title-${post.uri}`}>{post.title}</h1>
+    <Fragment class='text-white' set:html={post.content} />
   </article>
   <p>
     <a href='/'>Regresar</a>

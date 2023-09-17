@@ -1,11 +1,10 @@
 ---
 import Single from "../components/templates/Single.astro";
-
 import Archive from "../components/templates/Archive.astro";
 
 import type { GetNodeByURI, NodeByURI } from "../interfaces/getNodeByURI";
 
-import { getNodeByURI, getAllUris } from "../lib/api";
+import { getNodeByURI, getAllUris } from "../lib/worpdress";
 
 export const prerender = true;
 export async function getStaticPaths() {
@@ -32,3 +31,4 @@ const Template = resolveContentTemplate(node);
 ---
 
 <Template {node} />
+ ../lib/worpdress

@@ -1,15 +1,10 @@
-import { log } from "console";
-import type { GetAllUris } from "../interfaces";
 import {
   GET_ALL_URIS,
-  HOMEPAGE_POSTS_QUERY,
+  GET_HOMEPAGE_POSTS,
+  GET_POST_BY_SLUG,
   NAV_QUERY,
   NODE_BY_URI,
 } from "./queries";
-interface WPGraphQLParams {
-  query: string;
-  variables?: object;
-}
 
 const fetchQuery = async (query: string, variable?: object) => {
   return await fetch(import.meta.env.WP_URL, {
@@ -35,8 +30,9 @@ export async function getNodeByURI(uri: string) {
 }
 
 export async function homePagePostsQuery() {
-  const response = await fetchQuery(HOMEPAGE_POSTS_QUERY);
+  const response = await fetchQuery(GET_HOMEPAGE_POSTS);
   const { data } = await response.json();
+
   return data;
 }
 
@@ -69,4 +65,10 @@ export async function getAllUris() {
     });
 
   return uris;
+}
+
+export async function getPostBySlug(slug: string) {
+  const response = await fetchQuery(GET_POST_BY_SLUG, { slug });
+  const { data } = await response.json();
+  return data;
 }

@@ -1,4 +1,5 @@
 ---
+import stripHTML from "../utils/index";
 interface Props {
   title: string;
   uri: string;
@@ -14,42 +15,41 @@ interface Props {
   };
 }
 
-const { title, uri, excerpt, image } = Astro.props;
+const { title, uri, image } = Astro.props;
+const excerpt = stripHTML(Astro.props.excerpt);
 ---
 
-<article class='max-w-lg mx-auto'>
-  <div
-    class='bg-white shadow-md border border-gray-200 rounded-lg max-w-sm mb-5'
-  >
+<article
+  class='mx-auto flex flex-auto flex-col bg-white shadow-md border border-gray-200 rounded-lg max-w-sm'
+>
+  <a href={`${uri}`}>
+    <img
+      class='rounded-t-lg object-cover aspect-square'
+      src={image.sourceUrl}
+      srcset={image.srcSet}
+      height={image.mediaDetails.height}
+      width={image.mediaDetails.width}
+      alt={image.altText}
+      transition:name={`img-${uri}`}
+    />
+  </a>
+  <div class='p-5'>
     <a href={`${uri}`}>
-      <img
-        class='rounded-t-lg object-cover aspect-square'
-        src={image.sourceUrl}
-        srcset={image.srcSet}
-        height={image.mediaDetails.height}
-        width={image.mediaDetails.width}
-        alt={image.altText}
-        transition:name={`img-${uri}`}
-      />
-    </a>
-    <div class='p-5'>
-      <a href={`${uri}`}>
-        <h5
-          class='text-gray-900 font-bold text-2xl tracking-tight mb-2'
-          transition:name={`title-${uri}`}
-        >
-          {title}
-        </h5>
-      </a>
-      <div class='text-gray-600 text-sm mb-2'>
-        <Fragment set:html={excerpt} />
-      </div>
-      <a
-        class='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center'
-        href={`/blog${uri}`}
+      <h3
+        class='text-gray-900 font-bold text-xl line-clamp-2 tracking-tight mb-2'
+        transition:name={`title-${uri}`}
       >
-        Read more
-      </a>
-    </div>
+        {title}
+      </h3>
+    </a>
+    <p class='text-gray-600 text-sm mb-2 line-clamp-3'>
+      {excerpt}
+    </p>
+    <a
+      class='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center'
+      href={`${uri}`}
+    >
+      Leer más
+    </a>
   </div>
 </article>
