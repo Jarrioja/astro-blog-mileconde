@@ -1,0 +1,43 @@
+---
+import Layout from "../../layouts/default.astro";
+import { spotify } from "../../lib/spotify";
+
+const podcast = await spotify.shows.get("4VcWsUBhsZFPHi6c47GwIy", "ES");
+---
+
+<Layout title='Podcast'>
+  <h1 class='text-6xl font-bold mb-4'>Podcast</h1>
+  <img class='aspect-square w-64' src={podcast.images[0].url} alt='' />
+  <p class='prose' set:html={podcast.html_description} />
+  {
+    podcast.episodes.items.map((episode) => {
+      return (
+        <>
+          {episode.name.replace(/\d{3}\. /g, "")}
+          <audio id='reproductor' controls>
+            <source src={episode.audio_preview_url} type='audio/mpeg' />
+          </audio>
+        </>
+      );
+    })
+  }
+</Layout>
+
+<script>
+  // Obtén una referencia al elemento de audio
+  const reproductor = document.getElementById("reproductor");
+  if (reproductor) {
+    // Puedes agregar eventos para controlar la reproducción, pausa, etc.
+    reproductor.addEventListener("play", () => {
+      console.log("Reproduciendo...");
+    });
+
+    reproductor.addEventListener("pause", () => {
+      console.log("Pausado.");
+    });
+
+    reproductor.addEventListener("ended", () => {
+      console.log("Terminado.");
+    });
+  }
+</script>

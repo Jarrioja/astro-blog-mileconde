@@ -1,8 +1,9 @@
 ---
 import Layout from "../layouts/default.astro";
 import PostsGrid from "../components/PostsGrid.astro";
-import { homePagePostsQuery } from "../lib/api";
-import type { HomepagePostsQuery } from "../interfaces/homepagePostQuery";
+import { homePagePostsQuery, getAllUris, getNodeByURI } from "../lib/api";
+import type { HomepagePostsQuery, GetAllUris } from "../interfaces/";
+import type { GetNodeByURI } from "../interfaces/getNodeByURI";
 
 const { posts }: HomepagePostsQuery = await homePagePostsQuery();
 ---

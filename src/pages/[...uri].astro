@@ -1,0 +1,34 @@
+---
+import Single from "../components/templates/Single.astro";
+
+import Archive from "../components/templates/Archive.astro";
+
+import type { GetNodeByURI, NodeByURI } from "../interfaces/getNodeByURI";
+
+import { getNodeByURI, getAllUris } from "../lib/api";
+
+export const prerender = true;
+export async function getStaticPaths() {
+  const uris = await getAllUris();
+  return uris;
+}
+
+const uri = `/${Astro.params.uri}`;
+const { nodeByUri }: GetNodeByURI = await getNodeByURI(uri);
+const node = nodeByUri;
+
+function resolveContentTemplate(node: NodeByURI) {
+  const templates = {
+    Post: Single,
+    Page: Single,
+    Category: Archive,
+    Tag: Archive,
+  };
+
+  return templates[node.__typename] || Single;
+}
+
+const Template = resolveContentTemplate(node);
+---
+
+<Template {node} />

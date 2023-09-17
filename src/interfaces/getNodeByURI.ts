@@ -1,8 +1,4 @@
 export type GetNodeByURI = {
-  data: Data;
-};
-
-export type Data = {
   nodeByUri: NodeByURI;
 };
 

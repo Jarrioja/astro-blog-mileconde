@@ -1,0 +1,64 @@
+---
+interface Props {
+  post: {
+    id: string;
+    postId: number;
+    title: string;
+    date: string;
+    dateGmt: string;
+    modified: string;
+    modifiedGmt: string;
+    uri: string;
+    link: string;
+    guid: string;
+    excerpt: string;
+    content: string;
+    categories: {
+      nodes: {
+        name: string;
+        uri: string;
+      }[];
+    };
+    featuredImage: {
+      node: {
+        mediaItemUrl: string;
+        altText: string;
+      };
+    };
+    previous?: {
+      id: number;
+      title: string;
+      uri: string;
+    };
+    next?: {
+      id: number;
+      title: string;
+      uri: string;
+    };
+  };
+}
+export interface PostProps extends Props {}
+
+import Layout from "../../layouts/default.astro";
+const { node } = Astro.props;
+---
+
+<Layout title={node.title}>
+  <div class='aspect-video'>
+    {}
+    <img
+      class='object-contain h-full w-full'
+      src={node.featuredImage.node.mediaItemUrl}
+      srcset={node.featuredImage.node.srcSet}
+      alt={node.featuredImage.node.alt}
+      transition:name={`img-${node.uri}`}
+    />
+  </div>
+  <article class='prose lg:prose-xl bg-white mx-auto w-full'>
+    <h1 class='' transition:name={`title-${node.uri}`}>{node.title}</h1>
+    <Fragment class='text-white' set:html={node.content} />
+  </article>
+  <p>
+    <a href='/'>Regresar</a>
+  </p>
+</Layout>

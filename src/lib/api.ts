@@ -1,4 +1,11 @@
-import { NAV_QUERY, NODE_BY_URI, HOMEPAGE_POSTS_QUERY } from "./queries";
+import { log } from "console";
+import type { GetAllUris } from "../interfaces";
+import {
+  GET_ALL_URIS,
+  HOMEPAGE_POSTS_QUERY,
+  NAV_QUERY,
+  NODE_BY_URI,
+} from "./queries";
 interface WPGraphQLParams {
   query: string;
   variables?: object;
@@ -21,8 +28,8 @@ export async function navQuery() {
   return data;
 }
 
-export async function getNodeByURI(uri: object) {
-  const response = await fetchQuery(NODE_BY_URI, uri);
+export async function getNodeByURI(uri: string) {
+  const response = await fetchQuery(NODE_BY_URI, { uri });
   const { data } = await response.json();
   return data;
 }
@@ -33,86 +40,33 @@ export async function homePagePostsQuery() {
   return data;
 }
 
-//
-//   const response = await fetch(import.meta.env.WORDPRESS_API_URL, {
-//     method: "post",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({
-//       query: `{
-//                 posts {
-//                   nodes {
-//                     date
-//                     uri
-//                     title
-//                     commentCount
-//                     excerpt
-//                     categories {
-//                       nodes {
-//                         name
-//                         uri
-//                       }
-//                     }
-//                     featuredImage {
-//                       node {
-//                         srcSet
-//                         sourceUrl
-//                         altText
-//                         mediaDetails {
-//                           height
-//                           width
-//                         }
-//                       }
-//                     }
-//                   }
-//                 }
-//               }
-//             `,
-//     }),
-//   });
-//   const { data } = await response.json();
-//   return data;
-// }
+interface Uris {
+  params: {
+    uri: string;
+  };
+}
 
-// export async function getAllUris() {
-//   const response = await fetch(import.meta.env.WORDPRESS_API_URL, {
-//     method: "post",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({
-//       query: `query GetAllUris {
-//             terms {
-//               nodes {
-//                 uri
-//               }
-//             }
-//             posts(first: 100) {
-//               nodes {
-//                 uri
-//               }
-//             }
-//             pages(first: 100) {
-//               nodes {
-//                 uri
-//               }
-//             }
-//           }
-//           `,
-//     }),
-//   });
-//   const { data } = await response.json();
-//   const uris = Object.values(data)
-//     .reduce(function (acc, currentValue) {
-//       return acc.concat(currentValue.nodes);
-//     }, [])
-//     .filter((node) => node.uri !== null)
-//     .map((node) => {
-//       let trimmedURI = node.uri.substring(1);
-//       trimmedURI = trimmedURI.substring(0, trimmedURI.length - 1);
-//       return {
-//         params: {
-//           uri: trimmedURI,
-//         },
-//       };
-//     });
+export async function getAllUris() {
+  const response = await fetchQuery(GET_ALL_URIS);
+  const { data } = await response.json();
+  delete data.pages; // Eliminar paginas para poder hacer build
+  const uris: Uris = Object.values(data)
+    .reduce(function (acc: any, currentValue: any) {
+      return acc.concat(currentValue.nodes);
+    }, [])
+    .filter(
+      (node: any) =>
+        node.uri !== null && node.uri !== "/favicon.ico" && node.uri !== "/"
+    )
+    .map((node: any) => {
+      let trimmedURI = node.uri.substring(1);
+      trimmedURI = trimmedURI.substring(0, trimmedURI.length - 1);
+      return {
+        params: {
+          uri: trimmedURI,
+        },
+      };
+    });
 
-//   return uris;
-// }
+  return uris;
+}

@@ -92,6 +92,31 @@ export const NODE_BY_URI = `
     }
 `;
 
+export const GET_ALL_URIS = `
+    query GetAllUris {
+        terms {
+        nodes {
+            uri
+        }
+        }
+        categories {
+        nodes {
+            uri
+        }
+        }            
+        posts(first: 100) {
+        nodes {
+            uri
+        }
+        }
+        pages(first: 100) {
+        nodes {
+            uri
+        }
+        }
+    }
+`;
+
 export const HOMEPAGE_POSTS_QUERY = `
     query HOMEPAGE_POSTS_QUERY {
         posts {
