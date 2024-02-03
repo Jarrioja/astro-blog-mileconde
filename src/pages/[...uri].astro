@@ -12,23 +12,23 @@ export async function getStaticPaths() {
   return uris;
 }
 
-const uri = `/${Astro.params.uri}`;
+const { uri } = Astro.params;
 const { nodeByUri }: GetNodeByURI = await getNodeByURI(uri);
 const node = nodeByUri;
 
 function resolveContentTemplate(node: NodeByURI) {
-  const templates = {
+  const typename: string = node.__typename;
+  const templates: any = {
     Post: Single,
     Page: Single,
     Category: Archive,
     Tag: Archive,
   };
 
-  return templates[node.__typename] || Single;
+  return templates[typename] || Single;
 }
 
 const Template = resolveContentTemplate(node);
 ---
 
 <Template {node} />
- ../lib/worpdress
