@@ -8,4 +8,7 @@ export default defineConfig({
   integrations: [tailwind()],
   output: "hybrid",
   adapter: vercel(),
+  // base: "/blog/",
+  // trailingSlash: "always",
+  site: import.meta.env.SITE,
 });
