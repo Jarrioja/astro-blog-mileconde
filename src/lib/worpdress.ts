@@ -64,7 +64,7 @@ export async function getAllUris() {
   const uris: Uris[] = filterUris.map(({ uri }: Node) => {
     // let trimmedURI = uri!.substring(1);
     // trimmedURI = trimmedURI.substring(0, trimmedURI.length - 1);
-    console.log(uri!.substring(1));
+
     return {
       params: {
         uri: uri!.substring(1),
